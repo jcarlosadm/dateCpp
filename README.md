@@ -1,4 +1,4 @@
-calendarCpp
+dateCpp
 ===========
 
-Fornece uma classe de calendário que guarda uma data e possui métodos de manipulação desta data.
+Fornece uma classe Date que guarda uma data e possui métodos de manipulação desta data.
