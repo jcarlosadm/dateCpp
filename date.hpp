@@ -9,6 +9,7 @@
 #include <iostream>
 #include <ctime> // time_t, struct tm, funções de tempo
 #include <string> // manipulação de string
+#include <sstream> // para a composição de string
 #include <new> // new e delete
 
 using namespace std;
