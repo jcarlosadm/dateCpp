@@ -57,6 +57,45 @@ int getAmPmSystem(int hour){
 }
 
 /*
+ * Imprime o dia da semana de acordo com o valor fornecido
+ *
+ * int weekDay : dia da semana (0 - 6, começando pelo Domingo)
+ */
+void printWeek(int weekDay){
+
+    // imprime uma string de acordo com o dia da semana
+    switch(weekDay){
+    case SUNDAY:
+        cout<<"Sunday";
+        break;
+
+    case MONDAY:
+        cout<<"Monday";
+        break;
+
+    case TUESDAY:
+        cout<<"Tuesday";
+        break;
+
+    case WEDNESDAY:
+        cout<<"Wednesday";
+        break;
+
+    case THURSDAY:
+        cout<<"Thursday";
+        break;
+
+    case FRIDAY:
+        cout<<"Friday";
+        break;
+
+    case SATURDAY:
+        cout<<"Saturday";
+    }
+
+}
+
+/*
  * Cria data em segundos desde 1900
  */
 time_t makeDate(int day,int month,int year,int hour,int minute,int second){
@@ -263,7 +302,7 @@ void Date::getStringDate(DateFormat dateFormat, string& dateString, bool showWee
         hour = getHourInAmPm(tm->tm_hour);
         min = tm->tm_min;
         sec = tm->tm_sec;
-        ampm = (getAmPmSystem(tm->tm_hour)==AM_SYSTEM ? "am":"pm");
+        ampm = (getAmPmSystem(tm->tm_hour)==AM_SYSTEM ? AM : PM);
     }
 
     ostringstream os;
@@ -324,11 +363,184 @@ void Date::getStringDate(DateFormat dateFormat, string& dateString, bool showWee
 
 }
 
-/* corrigir depois */
-void Date::printDate(DateFormat dateFormat, bool showWeek){
+/*
+ * Gera uma string do dia da semana e coloca em weekString
+ *
+ * string& weekString : string a ser preenchida
+ */
+void Date::getStringWeek(string& weekString){
+
     tm* tm = localtime(&(data->secondsFull));
 
-    cout<< tm->tm_mday <<endl;
+    switch(tm->tm_wday){
+    case SUNDAY:
+        weekString = "Sunday";
+        break;
+    case MONDAY:
+        weekString = "Monday";
+        break;
+    case TUESDAY:
+        weekString = "Tuesday";
+        break;
+    case WEDNESDAY:
+        weekString = "Wednesday";
+        break;
+    case THURSDAY:
+        weekString = "Thursday";
+        break;
+    case FRIDAY:
+        weekString = "Friday";
+        break;
+    case SATURDAY:
+        weekString = "Saturday";
+    }
+
+}
+
+/*
+ * Adiciona (ou subtrai) um valor em uma componente da data
+ * Retorna false se não conseguir
+ *
+ * DateComponent dateComponent : parte da data a ser adicionada (ou subtraída)
+ * int value : valor a ser adicionado (ou subtraído)
+ * bool add : se deverá adicionar ou subtrair (adiciona por padrão)
+ */
+bool Date::addDateComponent(DateComponent dateComponent, int value, bool add){
+
+    tm* tm = localtime(&(data->secondsFull));
+
+    switch(dateComponent){
+    case MDAY:
+        if(add) tm->tm_mday += value;
+        else tm->tm_mday -= value;
+        break;
+    case YDAY:
+        if(add) tm->tm_yday += value;
+        else tm->tm_yday -= value;
+        break;
+    case WDAY:
+        if(add) tm->tm_wday += value;
+        else tm->tm_wday -= value;
+        break;
+    case MONTH:
+        if(add) tm->tm_mon += value;
+        else tm->tm_mon -= value;
+        break;
+    case YEAR:
+        if(add) tm->tm_year += value;
+        else tm->tm_year -= value;
+        break;
+    case HOUR:
+        if(add) tm->tm_hour += value;
+        else tm->tm_hour -= value;
+        break;
+    case HOUR_AMPM:
+        if(add) tm->tm_hour += value;
+        else tm->tm_hour -= value;
+        break;
+    case MINUTE:
+        if(add) tm->tm_min += value;
+        else tm->tm_min -= value;
+        break;
+    case SECOND:
+        if(add) tm->tm_sec += value;
+        else tm->tm_sec -= value;
+    }
+
+    time_t date2 = mktime(tm);
+
+    if(date2 != -1){
+        data->secondsFull = date2;
+        return true;
+    }
+    else
+        return false;
+
+}
+
+/*
+ * Imprime data no prompt
+ *
+ * DateFormat dateFormat : enumerador que indica o formato da string
+ *          a ser utilizado (veja o enumerador neste header file)
+ * bool showWeek : se o nome do dia da semana deve ser mostrado
+ *                  (sim por padrão)
+ */
+void Date::printDate(DateFormat dateFormat, bool showWeek){
+
+    // coloca data em uma estrutura struct tm (ver time.h)
+    tm* tm = localtime(&(data->secondsFull));
+
+    // imprime de acordo com o formato determinado em dateString
+    switch(dateFormat){
+
+    case DATE_DMY:
+        cout<<tm->tm_mday<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_year+1900;
+        break;
+
+    case DATE_YMD:
+        cout<<tm->tm_year+1900<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_mday;
+        break;
+
+    case DATE_HMS:
+        cout<<tm->tm_hour<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        break;
+
+    case DATE_HMS_AMPM:
+        cout<<getHourInAmPm(tm->tm_hour)<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        if(getAmPmSystem(tm->tm_hour) == AM_SYSTEM)
+            cout<<" "<<AM;
+        else
+            cout<<" "<<PM;
+        break;
+
+    case DATE_DMY_HMS:
+        cout<<tm->tm_mday<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_year+1900;
+        cout<<" "<<tm->tm_hour<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        break;
+
+    case DATE_YMD_HMS:
+        cout<<tm->tm_year+1900<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_mday;
+        cout<<" "<<tm->tm_hour<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        break;
+
+    case DATE_DMY_HMS_AMPM:
+        cout<<tm->tm_mday<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_year+1900;
+        cout<<" "<<getHourInAmPm(tm->tm_hour)<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        if(getAmPmSystem(tm->tm_hour) == AM_SYSTEM)
+            cout<<" "<<AM;
+        else
+            cout<<" "<<PM;
+        break;
+
+    case DATE_YMD_HMS_AMPM:
+        cout<<tm->tm_year+1900<<"/"<<tm->tm_mon+1<<"/"<<tm->tm_mday;
+        cout<<" "<<getHourInAmPm(tm->tm_hour)<<":"<<tm->tm_min<<":"<<tm->tm_sec;
+        if(getAmPmSystem(tm->tm_hour) == AM_SYSTEM)
+            cout<<" "<<AM;
+        else
+            cout<<" "<<PM;
+        break;
+    }
+
+    // imprime o nome do dia da semana, se foi solicitado
+    if(showWeek){
+        cout<<" ";
+        printWeek(tm->tm_wday);
+    }
+
+    // dá quebra de linha
+    cout<<endl;
+
+}
+
+/*
+ * Imprime no prompt o nome do dia da semana
+ */
+void Date::printWeekName(){
+    tm* tm = localtime(&(data->secondsFull));
+
+    printWeek(tm->tm_wday);
 }
 
 /*

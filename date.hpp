@@ -56,6 +56,10 @@ enum WeekComponent{
     SATURDAY // Sábado
 };
 
+// definição das strings AM e PM
+#define AM "am"
+#define PM "pm"
+
 /*
  * Classe Date
  */
