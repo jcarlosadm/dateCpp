@@ -68,6 +68,19 @@ public:
     Date();
 
     /*
+     * Construtor personalizado
+     * Configura a data para uma data especificada
+     *
+     * int day : dia do mês
+     * int month : mês
+     * int year : ano
+     * int hour : hora (padrão 0)
+     * int minute : minutos (padrão 0)
+     * int seconds : segundos (padrão 0)
+     */
+    Date(int day,int month, int year, int hour=0, int minute=0, int second=0);
+
+    /*
      * Destrutor
      */
     ~Date();
