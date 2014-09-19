@@ -181,11 +181,11 @@ private:
     /*
      * Estrutura de uma data
      */
-    struct Date;
+    struct DateStruct;
     /*
      * Dados referentes à data
      */
-    Date* data;
+    DateStruct* data;
 };
 
 
