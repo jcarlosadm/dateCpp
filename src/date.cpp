@@ -1,11 +1,15 @@
-/*
- * date.cpp
- *
+/**
+ * \file date.cpp
+ * Implementação do arquivo date.hpp
  */
 
 #include "../hpp_files/date.hpp"
 
-/*
+/***************************************************************************
+ * Estruturas
+ ***************************************************************************/
+
+/**
  * Estrutura Date da classe Date
  */
 struct Date::DateStruct{
@@ -13,7 +17,7 @@ struct Date::DateStruct{
     time_t secondsFull;
 };
 
-/*
+/**
  * enumerador que indica AM ou PM
  */
 enum AMPMSystem {
@@ -21,14 +25,14 @@ enum AMPMSystem {
     PM_SYSTEM
 };
 
-/* **************************************************
+/***************************************************************************
  * Funções auxiliares
- ****************************************************/
+ ***************************************************************************/
 
-/*
+/**
  * Pega hora em formato 24 horas e devolve em formato AM PM
- *
- * int hour : hora em formato 24 horas
+ * \return Horas no formato de 12 horas
+ * \param hour Hora em formato 24 horas
  */
 int getHourInAmPm(int hour){
     int returning;
@@ -43,11 +47,11 @@ int getHourInAmPm(int hour){
     return returning;
 }
 
-/*
+/**
  * Pega hora em formato 24 horas e devolve valor de AM_SYSTEM ou
  * PM_SYSTEM
- *
- * int hour : hora em formato de 24 horas
+ * \return AM_SYSTEM ou PM_SYSTEM
+ * \param hour Hora em formato de 24 horas
  */
 int getAmPmSystem(int hour){
     if(hour >= 0 && hour < 12)
@@ -56,10 +60,9 @@ int getAmPmSystem(int hour){
         return PM_SYSTEM;
 }
 
-/*
+/**
  * Imprime o dia da semana de acordo com o valor fornecido
- *
- * int weekDay : dia da semana (0 - 6, começando pelo Domingo)
+ * \param weekDay Dia da semana (0 - 6, começando pelo Domingo)
  */
 void printWeek(int weekDay){
 
@@ -95,8 +98,15 @@ void printWeek(int weekDay){
 
 }
 
-/*
+/**
  * Cria data em segundos desde 1900
+ * \return Data em segundos desde 1900
+ * \param day Dia do mês
+ * \param month Mês
+ * \param year Ano
+ * \param hour Hora
+ * \param minute Minutos
+ * \param second Segundos
  */
 time_t makeDate(int day,int month,int year,int hour,int minute,int second){
 
@@ -115,12 +125,12 @@ time_t makeDate(int day,int month,int year,int hour,int minute,int second){
     return data;
 }
 
-/* **************************************************
+/***************************************************************************
  * Funções da classe Date
- ****************************************************/
+ ***************************************************************************/
 
-/*
- * Construtor padrão
+/**
+ * Construtor padrão<BR>
  * Configura data para a data atual
  */
 Date::Date(){
@@ -130,16 +140,15 @@ Date::Date(){
     setDate();
 }
 
-/*
- * Construtor personalizado
+/**
+ * Construtor personalizado<BR>
  * Configura a data para uma data especificada
- *
- * int day : dia do mês
- * int month : mês
- * int year : ano
- * int hour : hora (padrão 0)
- * int minute : minutos (padrão 0)
- * int seconds : segundos (padrão 0)
+ * \param day Dia do mês
+ * \param month Mês
+ * \param year Ano
+ * \param hour Hora (valor padrão 0)
+ * \param minute Minutos (valor padrão 0)
+ * \param seconds Segundos (valor padrão 0)
  */
 Date::Date(int day,int month, int year, int hour, int minute, int second){
     // aloca memória para ponteiro-membro data
@@ -150,7 +159,7 @@ Date::Date(int day,int month, int year, int hour, int minute, int second){
         setDate();
 }
 
-/*
+/**
  * Destrutor
  */
 Date::~Date(){
@@ -160,7 +169,7 @@ Date::~Date(){
     data = NULL;
 }
 
-/*
+/**
  * Configura a data para a data atual
  */
 void Date::setDate(){
@@ -168,16 +177,15 @@ void Date::setDate(){
     data->secondsFull = time(0);
 }
 
-/*
+/**
  * Configura a data completa
- * Retorna false se não conseguir (a data é falsa)
- *
- * int day : dia do mês
- * int month : mês
- * int year : ano
- * int hour : hora (padrão 0)
- * int minute : minutos (padrão 0)
- * int seconds : segundos (padrão 0)
+ * \return false se não conseguir (a data não é válida)
+ * \param day Dia do mês
+ * \param month Mês
+ * \param year Ano
+ * \param hour Hora (padrão 0)
+ * \param minute Minutos (padrão 0)
+ * \param seconds Segundos (padrão 0)
  */
 bool Date::setDate(int day, int month, int year, int hour, int minute, int second){
 
@@ -199,11 +207,10 @@ bool Date::setDate(int day, int month, int year, int hour, int minute, int secon
 
 }
 
-/*
+/**
  * Configura data a partir dos segundos desde 1900
- * Retorna false se não conseguir (data não válida)
- *
- * time_t seconds : segundos desde 1900
+ * \return false se não conseguir (data não válida)
+ * \param seconds Segundos desde 1900
  */
 bool Date::setDate(time_t seconds){
     // se segundos menores que zero, retorna false
@@ -217,29 +224,28 @@ bool Date::setDate(time_t seconds){
     }
 }
 
-/*
+/**
  * Retorna a data em segundos desde 1900
+ * \return Segundos desde 1900
  */
 time_t Date::getDateInSeconds(){
     // retorna segundos totais desde 1900
     return data->secondsFull;
 }
 
-/*
+/**
  * Retorna um componente da data (dia, mês, ano, hora ...)
- * Retorna -1 se não conseguir retornar o solicitado
- *
- * DateComponent dateComponent : enumerador que indica a parte da
+ * \return -1 se não conseguir retornar o solicitado<BR>
+ * Obs: alguns retornos específicos:<BR>
+ * &nbsp; &nbsp; dia do mês: 1 - 31<BR>
+ * &nbsp; &nbsp; dia do ano: 1 - 365<BR>
+ * &nbsp; &nbsp; dia da semana: 0 (domingo) - 6(sábado)<BR>
+ * &nbsp; &nbsp; mês: 1 - 12<BR>
+ * &nbsp; &nbsp; hora: 0 - 23<BR>
+ * &nbsp; &nbsp; hora_ampm: 1-12<BR>
+ * &nbsp; &nbsp; outros: formatos já esperados
+ * \param dateComponent Enumerador que indica a parte da
  * data a ser retornada (veja o enumerador neste header file)
- *
- * Obs: alguns retornos específicos:
- * dia do mês: 1 - 31
- * dia do ano: 1 - 365
- * dia da semana: 0 (domingo) - 6(sábado)
- * mês: 1 - 12
- * hora: 0 - 23
- * hora_ampm: 1-12
- * outros: formatos já esperados
  */
 int Date::getDateComponent(DateComponent dateComponent){
     tm* tm = localtime(&(data->secondsFull));
@@ -268,13 +274,12 @@ int Date::getDateComponent(DateComponent dateComponent){
     }
 }
 
-/*
+/**
  * Gera uma string e coloca em dateString
- *
- * DateFormat dateFormat : indica qual o formato da string a ser utilizado
+ * \param dateFormat Indica qual o formato da string a ser utilizado
  *            (veja o enumerador DateFormat neste header file)
- * string& dateString : string a ser preenchida
- * bool showWeek : opção que indica se o nome do dia da semana é incluído
+ * \param dateString String a ser preenchida
+ * \param showWeek Opção que indica se o nome do dia da semana é incluído
  *                 (por padrão sim)
  */
 void Date::getStringDate(DateFormat dateFormat, string& dateString, bool showWeek){
@@ -363,10 +368,9 @@ void Date::getStringDate(DateFormat dateFormat, string& dateString, bool showWee
 
 }
 
-/*
+/**
  * Gera uma string do dia da semana e coloca em weekString
- *
- * string& weekString : string a ser preenchida
+ * \param weekString String a ser preenchida
  */
 void Date::getStringWeek(string& weekString){
 
@@ -397,13 +401,12 @@ void Date::getStringWeek(string& weekString){
 
 }
 
-/*
+/**
  * Adiciona (ou subtrai) um valor em uma componente da data
- * Retorna false se não conseguir
- *
- * DateComponent dateComponent : parte da data a ser adicionada (ou subtraída)
- * int value : valor a ser adicionado (ou subtraído)
- * bool add : se deverá adicionar ou subtrair (adiciona por padrão)
+ * \return false se não conseguir
+ * \param dateComponent Parte da data a ser adicionada (ou subtraída)
+ * \param value Valor a ser adicionado (ou subtraído)
+ * \param add Se deverá adicionar ou subtrair (adiciona por padrão)
  */
 bool Date::addDateComponent(DateComponent dateComponent, int value, bool add){
 
@@ -458,12 +461,11 @@ bool Date::addDateComponent(DateComponent dateComponent, int value, bool add){
 
 }
 
-/*
+/**
  * Imprime data no prompt
- *
- * DateFormat dateFormat : enumerador que indica o formato da string
+ * \param dateFormat Enumerador que indica o formato da string
  *          a ser utilizado (veja o enumerador neste header file)
- * bool showWeek : se o nome do dia da semana deve ser mostrado
+ * \param showWeek Se o nome do dia da semana deve ser mostrado
  *                  (sim por padrão)
  */
 void Date::printDate(DateFormat dateFormat, bool showWeek){
@@ -534,7 +536,7 @@ void Date::printDate(DateFormat dateFormat, bool showWeek){
 
 }
 
-/*
+/**
  * Imprime no prompt o nome do dia da semana
  */
 void Date::printWeekName(){
@@ -543,16 +545,15 @@ void Date::printWeekName(){
     printWeek(tm->tm_wday);
 }
 
-/*
+/**
  * Verifica se uma data é válida
- * Retorna false se não for
- *
- * int day : dia do mês
- * int month : mês
- * int year : ano
- * int hour : hora (padrão 0)
- * int minute : minutos (padrão 0)
- * int second : segundos (padrão 0)
+ * \return false se não for
+ * \param day Dia do mês
+ * \param month Mês
+ * \param year Ano
+ * \param hour Hora (valor padrão 0)
+ * \param minute Minutos (valor padrão 0)
+ * \param second Segundos (valor padrão 0)
  */
 bool Date::validateDate(int day, int month, int year, int hour, int minute, int second){
 

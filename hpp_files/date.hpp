@@ -203,5 +203,4 @@ private:
     DateStruct* data;
 };
 
-
 #endif /* DATE_HPP_ */
