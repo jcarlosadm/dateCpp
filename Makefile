@@ -22,7 +22,7 @@ HPP_DIR= hpp_files/
 # compilador
 CC= g++
 # opções usadas pelo compilador
-CCFLAGS= -fPIC -Wall
+CCFLAGS= -Wall
 # bibliotecas usadas no projeto
 LIBDEPS=
 
@@ -87,24 +87,31 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.$(SRC_SUFFIX)
 	  sed -e 's/^ *//' -e 's/$$/:/' >> $(OBJ_DIR)$*.d
 	@rm -f $(OBJ_DIR)$*.d.tmp
 
-# gera biblioteca com todos os objetos do projeto
-buildLib:
-	$(CC) -shared $(patsubst $(HPP_DIR)%.$(HPP_SUFFIX),$(OBJ_DIR)%.o, $(HPP_LIST)) \
-	-o lib$(LIBRARY_NAME).so
+# gera biblioteca estática com todos os objetos do projeto
+buildLib: lib$(LIBRARY_NAME).a
+
+lib$(LIBRARY_NAME).a: $(patsubst $(HPP_DIR)%.$(HPP_SUFFIX),$(OBJ_DIR)%.o, $(HPP_LIST))
+	ar -rcs lib$(LIBRARY_NAME).a $(patsubst $(HPP_DIR)%.$(HPP_SUFFIX),$(OBJ_DIR)%.o, $(HPP_LIST))
 
 # comando para instalar a biblioteca no linux ubuntu/debian (use com sudo)
-install:
+install: buildLib
 	$(MK_DIR) /usr/local/include/$(LIBRARY_NAME)
 	@cp $(HPP_LIST) /usr/local/include/$(LIBRARY_NAME)/
-	@cp lib$(LIBRARY_NAME).so /usr/local/lib/
-	@ln -nsf /usr/local/lib/lib$(LIBRARY_NAME).so /usr/lib/
+	@cp lib$(LIBRARY_NAME).a /usr/local/lib/
+	@ln -nsf /usr/local/lib/lib$(LIBRARY_NAME).a /usr/lib/
+	@echo 'done'
+
+# comando para desinstalar a biblioteca no linux ubuntu/debian (use com sudo)
+uninstall:
+	@rm -rf /usr/local/include/$(LIBRARY_NAME)/
+	@rm -rf /usr/local/lib/lib$(LIBRARY_NAME).a /usr/lib/lib$(LIBRARY_NAME).a
 	@echo 'done'
 
 .PHONY: clean
 # comando para limpar tudo
 clean:
 	rm -rf $(OBJ_DIR)*.o $(OBJ_DIR)*.d $(BIN_TESTS_DIR)* $(BIN_DIR)$(BIN_NAME) *.so \
-	*.dll *.dll.a *.dylib
+	*.dll *.dll.a *.dylib *.a
 
 # exemplo de teste:
 #
