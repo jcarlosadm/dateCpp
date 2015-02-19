@@ -1,5 +1,5 @@
 /**
- * \file date.hpp
+ * \file date.h
  * Módulo que cria e manipula uma data
  */
 
@@ -90,7 +90,7 @@ public:
      * \param year Ano
      * \param hour Hora (valor padrão 0)
      * \param minute Minutos (valor padrão 0)
-     * \param seconds Segundos (valor padrão 0)
+     * \param second Segundos (valor padrão 0)
      */
     Date(int day,int month, int year, int hour=0, int minute=0, int second=0);
 
@@ -112,7 +112,7 @@ public:
      * \param year Ano
      * \param hour Hora (padrão 0)
      * \param minute Minutos (padrão 0)
-     * \param seconds Segundos (padrão 0)
+     * \param second Segundos (padrão 0)
      */
     bool setDate(int day, int month, int year, int hour=0, int minute=0, int second=0);
 

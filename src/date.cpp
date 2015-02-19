@@ -187,7 +187,7 @@ void Date::setDate(){
  * \param year Ano
  * \param hour Hora (padrão 0)
  * \param minute Minutos (padrão 0)
- * \param seconds Segundos (padrão 0)
+ * \param second Segundos (padrão 0)
  */
 bool Date::setDate(int day, int month, int year, int hour, int minute, int second){
 
