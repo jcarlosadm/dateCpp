@@ -12,7 +12,12 @@
 #include <sstream>
 #include <new>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
+using std::ostringstream;
+
+namespace dateCpp{
 
 /**
  * Enumerador das partes de uma data
@@ -202,5 +207,7 @@ private:
      */
     DateStruct* data;
 };
+
+} /** namespace dateCpp */
 
 #endif /* DATE_HPP_ */

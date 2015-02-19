@@ -5,6 +5,8 @@
 
 #include "date.h"
 
+namespace dateCpp{
+
 /***************************************************************************
  * Estruturas
  ***************************************************************************/
@@ -592,3 +594,5 @@ bool Date::validateDate(int day, int month, int year, int hour, int minute, int 
 
     return true;
 }
+
+} /** namespace dateCpp */
