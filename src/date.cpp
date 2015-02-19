@@ -3,7 +3,7 @@
  * Implementação do arquivo date.hpp
  */
 
-#include "../hpp_files/date.hpp"
+#include "date.h"
 
 /***************************************************************************
  * Estruturas
