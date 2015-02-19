@@ -1,7 +1,7 @@
 dateCpp
 ===========
 
-Fornece uma dateCpp::classe Date que guarda uma data e possui métodos de manipulação desta data.
+Fornece uma classe dateCpp::Date que guarda uma data e possui métodos de manipulação desta data.
 
 Para gerar a documentação, use o comando `doxygen doxygen_config` na pasta raiz do projeto. É necessário ter o doxygen instalado. Depois basta dar dois cliques no arquivo *index.html* na pasta *DOCS/html/*.
 
